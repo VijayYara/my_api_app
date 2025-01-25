@@ -428,6 +428,6 @@ def get_marks():
     names = request.args.getlist('name')
     
     # Fetch the marks for each name from the marks_data dictionary
-    marks = [i['marks'] for i in marks_data if i['name'] in names]
+    marks = [i['marks'] for j in names for i in marks_data if i['name'] == j]
     # marks = [123, 456]
     return jsonify({"marks": marks})
