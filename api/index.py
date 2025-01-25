@@ -22,10 +22,10 @@ marks_data = [{
 # @app.route("/api", methods=["GET"])
 @app.route("/api", methods=["GET"])
 def get_marks():
-    # # Get the 'name' parameters from the query string
-    # names = request.args.getlist('name')
+    # Get the 'name' parameters from the query string
+    names = request.args.getlist('name')
     
-    # # Fetch the marks for each name from the marks_data dictionary
-    # marks = [i['marks'] for i in marks_data if i['name'] in names]
-    marks = [123, 456]
+    # Fetch the marks for each name from the marks_data dictionary
+    marks = [i['marks'] for i in marks_data if i['name'] in names]
+    # marks = [123, 456]
     return jsonify({"marks": marks})
