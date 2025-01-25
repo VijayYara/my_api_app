@@ -19,6 +19,9 @@ marks_data = [{
         "marks": 25
     }]
 
+with open('marks.json') as f:
+    marks_data = json.load(f)
+
 # @app.route("/api", methods=["GET"])
 @app.route("/api", methods=["GET"])
 def get_marks():
