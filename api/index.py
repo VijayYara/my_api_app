@@ -432,26 +432,26 @@
 #     # marks = [123, 456]
 #     return jsonify({"marks": marks})
 
-from fastapi import FastAPI, Request, HTTPException
-import httpx
-from starlette.responses import Response
 
-app = FastAPI()
+from flask import Flask, request, jsonify, Response
+import requests
 
-@app.get("/api")
-async def proxy(url: str):
+app = Flask(__name__)
+
+@app.route("/api", methods=["GET"])
+def proxy():
+    url = request.args.get("url")
+    if not url:
+        return jsonify({"error": "Missing URL parameter"}), 400
+    
     try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url)
-            
-            # Extract content-type to properly forward the response
-            content_type = response.headers.get("content-type", "application/json")
-
-            return Response(
-                content=response.content,
-                status_code=response.status_code,
-                media_type=content_type,
-                headers={"Access-Control-Allow-Origin": "*"}
-            )
+        response = requests.get(url)
+        headers = {"Access-Control-Allow-Origin": "*"}
+        
+        flask_response = Response(response.content, response.status_code, headers)
+        return flask_response
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=8000)
